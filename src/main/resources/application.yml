@@ -1,0 +1,6 @@
+jwt:
+  secret: secret
+  access:
+    expiration: 3600000
+  refresh:
+    expiration: 2628000000

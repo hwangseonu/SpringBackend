@@ -30,4 +30,8 @@ public class User {
         this.role = role;
     }
 
+    public boolean equals(User user) {
+        return username.equals(user.getUsername());
+    }
+
 }

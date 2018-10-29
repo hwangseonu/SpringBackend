@@ -71,6 +71,7 @@ public class AccountController {
                         .password(passwordEncoder.encode(request.getPassword()))
                         .nickname(request.getNickname())
                         .email(request.getEmail())
+                        .role("ROLE_USER")
                 .build()
         );
     }
