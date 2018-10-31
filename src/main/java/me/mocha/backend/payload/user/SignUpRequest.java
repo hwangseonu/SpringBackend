@@ -1,11 +1,11 @@
-package me.mocha.backend.payload.account;
+package me.mocha.backend.payload.user;
 
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class RegisterRequest {
+public class SignUpRequest {
 
     @NotBlank
     private String username;

@@ -1,4 +1,4 @@
-package me.mocha.backend.payload.account;
+package me.mocha.backend.payload.user;
 
 import lombok.Data;
 

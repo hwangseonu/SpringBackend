@@ -3,6 +3,7 @@ package me.mocha.backend.model.entity;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 public class User {
 
     @Id
+    @Column(length = 100)
     private String username;
 
     private String password;

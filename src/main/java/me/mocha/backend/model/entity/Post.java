@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Data
@@ -22,11 +23,15 @@ public class Post {
     @JoinColumn(name = "writer")
     private User writer;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Collection<Comment> comments;
+
     @Builder
-    public Post(String title, String content, User writer) {
+    public Post(String title, String content, User writer, Collection<Comment> comments) {
         this.title = title;
         this.content = content;
         this.writer = writer;
+        this.comments = comments;
     }
 
 }

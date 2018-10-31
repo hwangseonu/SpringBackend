@@ -1,19 +1,19 @@
-package me.mocha.backend.payload.account;
+package me.mocha.backend.payload.auth;
 
 import lombok.Data;
 
 @Data
-public class LoginResponse {
+public class SignInResponse {
 
     private String accessToken;
 
     private String refreshToken;
 
-    public LoginResponse(String accessToken) {
+    public SignInResponse(String accessToken) {
         this(accessToken, null);
     }
 
-    public LoginResponse(String accessToken, String refreshToken) {
+    public SignInResponse(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
