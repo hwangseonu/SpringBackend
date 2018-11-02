@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 @RestController
 @RequestMapping("/auth")
@@ -46,7 +46,7 @@ public class AuthController {
                 String username = tokenProvider.getUsernameFromToken(token, JwtType.REFRESH);
                 if (userRepository.existsById(username)) {
                     SignInResponse response = new SignInResponse(tokenProvider.generateToken(username, JwtType.ACCESS));
-                    if (Period.between(LocalDate.now(), tokenProvider.getExpiration(token).toLocalDate()).getDays() <= 7) {
+                    if (ChronoUnit.DAYS.between(LocalDate.now(), tokenProvider.getExpiration(token)) <= 7) {
                         response.setRefreshToken(tokenProvider.generateToken(username, JwtType.REFRESH));
                     }
                     return response;
