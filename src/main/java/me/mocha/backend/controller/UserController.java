@@ -2,6 +2,7 @@ package me.mocha.backend.controller;
 
 import me.mocha.backend.annotation.CurrentUser;
 import me.mocha.backend.exception.account.UserAlreadyExistsException;
+import me.mocha.backend.model.repository.PostRepository;
 import me.mocha.backend.model.repository.UserRepository;
 import me.mocha.backend.model.entity.User;
 import me.mocha.backend.payload.user.InfoResponse;
@@ -20,10 +21,12 @@ public class UserController {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
-    public UserController(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public UserController(PasswordEncoder passwordEncoder, UserRepository userRepository, PostRepository postRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
     }
 
     @PostMapping
@@ -41,6 +44,15 @@ public class UserController {
                         .role("ROLE_USER")
                 .build()
         );
+    }
+
+    @DeleteMapping
+    public void withdrawal(@CurrentUser User user) {
+        postRepository.findAllByWriter(user).forEach(post -> {
+            post.setWriter(null);
+            postRepository.save(post);
+        });
+        userRepository.delete(user);
     }
 
     @GetMapping
