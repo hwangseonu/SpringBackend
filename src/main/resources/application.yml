@@ -1,12 +1,12 @@
-spring:
-  datasource:
-    url: jdbc:mariadb://localhost:3306/backend
-    username: root
-    password: mocha127
-    driver-class-name: org.mariadb.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create
+#spring:
+#  datasource:
+#    url: jdbc:mariadb://localhost:3306/backend
+#    username: root
+#    password: toor
+#    driver-class-name: org.mariadb.jdbc.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
 
 
 jwt:

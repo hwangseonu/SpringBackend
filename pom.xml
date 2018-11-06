@@ -78,10 +78,10 @@
             <version>2.9.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.mariadb.jdbc</groupId>-->
+            <!--<artifactId>mariadb-java-client</artifactId>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
