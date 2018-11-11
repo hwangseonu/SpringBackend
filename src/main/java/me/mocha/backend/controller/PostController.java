@@ -92,7 +92,7 @@ public class PostController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addComment(@CurrentUser User user, @PathVariable("pid")long pid, @Valid @RequestBody AddCommentRequest request) throws PostNotFoundException {
         Post found = postRepository.findById(pid).orElseThrow(PostNotFoundException::new);
-        found.getComments().add(new Comment(request.getContent() , user, LocalDateTime.now()));
+        found.getComments().add(new Comment(request.getContent() , user, LocalDateTime.now(), LocalDateTime.now()));
         postRepository.save(found);
     }
 
@@ -119,6 +119,7 @@ public class PostController {
         checkPermission(user, comment.getWriter());
         if (!post.getComments().contains(comment)) throw new CommentNotFoundException();
         comment.setContent(request.getContent());
+        comment.setUpdate_at(LocalDateTime.now());
         commentRepository.save(comment);
     }
 

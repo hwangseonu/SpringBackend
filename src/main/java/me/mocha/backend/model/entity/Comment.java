@@ -21,12 +21,14 @@ public class Comment {
     private User writer;
 
     private LocalDateTime create_at;
+    private LocalDateTime update_at;
 
     @Builder
-    public Comment(String content, User writer, LocalDateTime create_at) {
+    public Comment(String content, User writer, LocalDateTime create_at, LocalDateTime update_at) {
         this.content = content;
         this.writer = writer;
         this.create_at = create_at;
+        this.update_at = update_at;
     }
 
 }
