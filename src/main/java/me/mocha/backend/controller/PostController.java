@@ -119,7 +119,7 @@ public class PostController {
         checkPermission(user, comment.getWriter());
         if (!post.getComments().contains(comment)) throw new CommentNotFoundException();
         comment.setContent(request.getContent());
-        comment.setUpdate_at(LocalDateTime.now());
+        comment.setUpdateAt(LocalDateTime.now());
         commentRepository.save(comment);
     }
 

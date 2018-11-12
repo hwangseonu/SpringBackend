@@ -20,15 +20,15 @@ public class Comment {
     @JoinColumn(name = "writer")
     private User writer;
 
-    private LocalDateTime create_at;
-    private LocalDateTime update_at;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
 
     @Builder
-    public Comment(String content, User writer, LocalDateTime create_at, LocalDateTime update_at) {
+    public Comment(String content, User writer, LocalDateTime createAt, LocalDateTime updateAt) {
         this.content = content;
         this.writer = writer;
-        this.create_at = create_at;
-        this.update_at = update_at;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
     }
 
 }
