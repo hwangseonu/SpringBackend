@@ -1,33 +1,25 @@
-# SpringBackend
-[![Build Status](https://travis-ci.com/hwangseonu/SpringBackend.svg?branch=master)](https://travis-ci.com/hwangseonu/SpringBackend)
-[![documentation](https://img.shields.io/badge/documentation-reference-blue.svg?style=flat)](https://spring.mocha.ga/swagger-ui.html)  
-Spring boot 를 활용한 백엔드 프로젝트
-
-## 개요
-Spring boot 학습을 위해 사용자 생성, 사용자 인증, 사용자 삭제, 게시글 쓰기, 댓글 쓰기, 게시글 수정, 댓글 수정, 게시글 삭제, 댓글 삭제를 구현한 프로젝트입니다. 
+# SpringBackend  
+Spring boot 를 활용한 CRUD가 있는 백엔드를 구현해본다.   
 
 ## Technical Stack
 
 ### Language
-- java(8)
+- java 8
 
 ### Framework
-- Spring
+- Spring Boot 2.1.3.RELEASE
 
 ### Dependency Management
-- maven
+- Gradle
 
 ### Database
-- mariaDB
+- MariaDB
 
 ### ORM
-- JPA
+- JPA (hibernate)
 
 ### Authentication
-- JWT (json web token)
-
-### API Docs
-- Swagger2
+- Json Web Token (jjwt:0.9.0)
 
 ### Server
-- tomcat (embedded)
+- Tomcat (embedded)
