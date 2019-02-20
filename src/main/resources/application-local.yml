@@ -2,12 +2,12 @@ spring:
   datasource:
     url: jdbc:mariadb://localhost:3306/sweetide
     username: root
-    password: toor
+    password: mocha127
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
 
 jwt:
   access:
