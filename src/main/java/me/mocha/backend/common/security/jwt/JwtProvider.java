@@ -2,6 +2,7 @@ package me.mocha.backend.common.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
 import me.mocha.backend.common.model.entity.Token;
 import me.mocha.backend.common.model.entity.User;
 import me.mocha.backend.common.model.repository.TokenRepository;
@@ -22,6 +23,7 @@ public class JwtProvider {
     @Value("${jwt.refresh.exp}")
     private long refreshExp;
 
+    @Getter
     private String secret = System.getenv("JWT_SECRET");
 
     private final TokenRepository tokenRepository;
