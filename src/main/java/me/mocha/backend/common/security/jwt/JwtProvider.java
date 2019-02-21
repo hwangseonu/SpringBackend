@@ -1,5 +1,6 @@
 package me.mocha.backend.common.security.jwt;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
@@ -53,6 +54,22 @@ public class JwtProvider {
                 .setId(id.toString())
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
+    }
+
+    public String getId(String jwt, JwtType type) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .requireSubject(type.toString())
+                .parseClaimsJwt(jwt).getBody().getId();
+    }
+
+    public boolean validToken(String token, JwtType type) {
+        try {
+            Jwts.parser().requireSubject(type.toString()).setSigningKey(secret).parseClaimsJws(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
     }
 
 }
