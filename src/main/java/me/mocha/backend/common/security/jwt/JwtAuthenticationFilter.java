@@ -53,10 +53,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 response.sendError(422);
+                return;
             }
-        } else {
-            response.sendError(401);
         }
+        filterChain.doFilter(request, response);
     }
 
     private String getJwtFromHeader(HttpServletRequest request) {

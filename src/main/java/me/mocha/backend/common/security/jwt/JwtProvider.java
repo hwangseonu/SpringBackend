@@ -4,16 +4,12 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
-import me.mocha.backend.common.model.entity.Token;
-import me.mocha.backend.common.model.entity.User;
-import me.mocha.backend.common.model.repository.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Component
 public class JwtProvider {
@@ -27,31 +23,18 @@ public class JwtProvider {
     @Getter
     private String secret = System.getenv("JWT_SECRET");
 
-    private final TokenRepository tokenRepository;
-
     @Autowired
-    public JwtProvider(TokenRepository tokenRepository) {
+    public JwtProvider() {
         if (!StringUtils.hasText(secret)) secret = "jwt_secret";
-        this.tokenRepository = tokenRepository;
     }
 
-    public String createToken(User user, String userAgent, JwtType type) {
-        UUID id = UUID.randomUUID();
-
-        tokenRepository.deleteByOwnerAndUserAgentAndType(user, userAgent, type);
-        tokenRepository.save(new Token(
-           id,
-           user,
-           userAgent,
-           type
-        ));
-
+    public String createToken(String uuid, JwtType type) {
         return Jwts.builder()
                 .setSubject(type.toString())
                 .setExpiration(new Date(System.currentTimeMillis() + (type == JwtType.ACCESS ? accessExp : refreshExp)))
                 .setIssuedAt(new Date())
                 .setNotBefore(new Date())
-                .setId(id.toString())
+                .setId(uuid)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
