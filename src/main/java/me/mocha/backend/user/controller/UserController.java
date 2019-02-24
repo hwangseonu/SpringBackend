@@ -1,5 +1,6 @@
 package me.mocha.backend.user.controller;
 
+import me.mocha.backend.common.annotation.CurrentUser;
 import me.mocha.backend.common.model.entity.User;
 import me.mocha.backend.common.model.repository.UserRepository;
 import me.mocha.backend.common.security.jwt.JwtProvider;
@@ -10,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collections;
@@ -34,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest request) {
+    public ResponseEntity<SignInResponse> signUp(@Valid @RequestBody SignUpRequest request) {
         if (userRepository.existsByUsernameOrNicknameOrEmail(request.getUsername(), request.getNickname(), request.getEmail()))
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         User user = userRepository.save(User.builder()
@@ -47,6 +45,11 @@ public class UserController {
         return ResponseEntity.ok().body(new SignInResponse(
                 jwtProvider.createToken(user.getUsername(), JwtType.ACCESS),
                 jwtProvider.createToken(user.getUsername(), JwtType.REFRESH)));
+    }
+
+    @GetMapping
+    public ResponseEntity<User> getUserData(@CurrentUser User user) {
+        return ResponseEntity.ok(user);
     }
 
 }

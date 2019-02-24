@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findById(username).orElseThrow(() -> new UsernameNotFoundException("cannot find user by username"));
         List<GrantedAuthority> authorities = new ArrayList<>();

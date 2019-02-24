@@ -39,16 +39,16 @@ public class JwtProvider {
     }
 
     public String getUsername(String jwt) {
-        return Jwts.parser().parseClaimsJws(jwt).getBody().get("identity", String.class);
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(jwt).getBody().get("identity", String.class);
     }
 
     public LocalDateTime getExpiration(String jwt) {
-        return LocalDateTime.ofInstant(Jwts.parser().parseClaimsJws(jwt).getBody().getExpiration().toInstant(), ZoneId.systemDefault());
+        return LocalDateTime.ofInstant(Jwts.parser().setSigningKey(secret).parseClaimsJws(jwt).getBody().getExpiration().toInstant(), ZoneId.systemDefault());
     }
 
     public boolean isValid(String jwt, JwtType type) {
         try {
-            Jwts.parser().requireSubject(type.toString()).parseClaimsJws(jwt);
+            Jwts.parser().requireSubject(type.toString()).setSigningKey(secret).parseClaimsJws(jwt);
             return true;
         } catch (JwtException e) {
             return true;
