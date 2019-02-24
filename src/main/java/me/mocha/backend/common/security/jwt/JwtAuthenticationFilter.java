@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtProvider.isValid(token, JwtType.ACCESS)) {
                 String username = jwtProvider.getUsername(token);
                 if (!userRepository.existsById(username)) {
-                    response.sendError(404);
+                    response.setStatus(404);
                     return;
                 }
                 User userDetails = userDetailsService.loadUserByUsername(username);
@@ -45,9 +45,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             } else {
-                response.sendError(422);
+                response.setStatus(422);
                 return;
             }
+        } else {
+            response.setStatus(401);
         }
         filterChain.doFilter(request, response);
     }
