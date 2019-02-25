@@ -4,7 +4,7 @@ import lombok.*;
 import me.mocha.backend.common.model.entity.User;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Data
@@ -23,13 +23,13 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @ManyToOne (fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "writer")
     private User writer;
 
-    private LocalDateTime createAt;
+    private Date createAt;
 
-    private LocalDateTime updateAt;
+    private Date updateAt;
 
     private long views;
 

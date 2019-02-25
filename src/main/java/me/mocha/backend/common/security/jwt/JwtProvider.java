@@ -51,7 +51,7 @@ public class JwtProvider {
             Jwts.parser().requireSubject(type.toString()).setSigningKey(secret).parseClaimsJws(jwt);
             return true;
         } catch (JwtException e) {
-            return true;
+            return false;
         }
     }
 

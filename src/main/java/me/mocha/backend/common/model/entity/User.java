@@ -61,4 +61,17 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public boolean equals(Object object) {
+        try {
+            User user = (User) object;
+            if (!this.username.equals(user.username)) return false;
+            if (!this.nickname.equals(user.nickname)) return false;
+            if (!this.email.equals(user.email)) return false;
+            if (!this.roles.containsAll(user.roles)) return false;
+            return true;
+        } catch (ClassCastException e) {
+            return false;
+        }
+    }
 }
