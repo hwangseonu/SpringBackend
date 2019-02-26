@@ -1,0 +1,9 @@
+POST http://localhost:8080/posts/1/comments
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhY2Nlc3MiLCJqdGkiOiJlZTk1MmY3ZS1kY2Y0LTRjYTUtOTkxZS1jMmIwNDM4MjI2ZGQiLCJleHAiOjE1NTExNjI4NDYsIm5iZiI6MTU1MTE1NjQ0NiwiaWF0IjoxNTUxMTU2NDQ2LCJpZGVudGl0eSI6InRlc3QifQ.-4OBpV1KYEbJC-d7XTq7GZsieWl2joPKx7InYmSlWC131N2WEn3TfvUUp-5H-KKHLAZig8g_zqdmg6XEjXNHYg
+Content-Type: application/json
+
+{
+  "content": "testContent"
+}
+
+###
