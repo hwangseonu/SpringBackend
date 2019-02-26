@@ -11,11 +11,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NewPostRequest {
-
-    @NotBlank
-    @NotNull
-    private String title;
+public class AddCommentRequest {
 
     @NotBlank
     @NotNull
