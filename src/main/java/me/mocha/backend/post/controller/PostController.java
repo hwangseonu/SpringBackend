@@ -62,6 +62,7 @@ public class PostController {
         if (!post.getWriter().equals(user)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
+        post.setUpdateAt(new Date());
         return ResponseEntity.ok(postRepository.save(post));
     }
 
