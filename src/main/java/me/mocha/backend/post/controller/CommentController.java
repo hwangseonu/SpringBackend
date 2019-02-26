@@ -38,4 +38,21 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateComment(@PathVariable("pid") long pid, @PathVariable("id") long id, @CurrentUser User user, @Valid @RequestBody AddCommentRequest request) {
+        Post post = postRepository.findById(pid).orElse(null);
+        if (post == null) return ResponseEntity.notFound().build();
+        boolean isFound = false;
+        for (Comment c : post.getComments()) {
+            if (c.getId() == id) {
+                c.setContent(request.getContent());
+                c.setUpdateAt(new Date());
+                isFound = true;
+            }
+        }
+        if (!isFound) return ResponseEntity.notFound().build();
+        postRepository.save(post);
+        return ResponseEntity.ok().build();
+    }
+
 }
