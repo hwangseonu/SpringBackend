@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Date;
 
@@ -29,17 +30,17 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getPost(@PathVariable long id) {
+    public ResponseEntity<Post> getPost(@PathVariable("id") long id) {
         Post post = postRepository.findById(id).orElse(null);
         if (post == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(post);
     }
 
-//    @GetMapping
-//    public ResponseEntity<?> getAllPost(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-//        Page<Post> posts = postRepository.findAll(pageable);
-//        return ResponseEntity.ok(posts.getContent());
-//    }
+    @GetMapping
+    public ResponseEntity<?> getAllPost(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Post> posts = postRepository.findAll(pageable);
+        return ResponseEntity.ok(posts.getContent());
+    }
 
     @PostMapping
     public ResponseEntity<Post> newPost(@CurrentUser User user, @Valid @RequestBody NewPostRequest request) {
