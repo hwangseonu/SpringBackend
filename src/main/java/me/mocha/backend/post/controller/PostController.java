@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Date;
 
@@ -27,19 +26,6 @@ public class PostController {
     @Autowired
     public PostController(PostRepository postRepository) {
         this.postRepository = postRepository;
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Post> getPost(@PathVariable("id") long id) {
-        Post post = postRepository.findById(id).orElse(null);
-        if (post == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(post);
-    }
-
-    @GetMapping
-    public ResponseEntity<?> getAllPost(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Post> posts = postRepository.findAll(pageable);
-        return ResponseEntity.ok(posts.getContent());
     }
 
     @PostMapping
@@ -55,7 +41,32 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
+    @GetMapping
+    public ResponseEntity<?> getAllPost(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Post> posts = postRepository.findAll(pageable);
+        return ResponseEntity.ok(posts.getContent());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Post> getPost(@PathVariable("id") long id) {
+        Post post = postRepository.findById(id).orElse(null);
+        if (post == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(post);
+    }
+
+    @PatchMapping("/{id}")
+    @SuppressWarnings("Duplicates")
+    public ResponseEntity<Post> updatePost(@PathVariable("id") long id, @CurrentUser User user, @Valid @RequestBody NewPostRequest request) {
+        Post post = postRepository.findById(id).orElse(null);
+        if (post == null) return ResponseEntity.notFound().build();
+        if (!post.getWriter().equals(user)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        return ResponseEntity.ok(postRepository.save(post));
+    }
+
     @DeleteMapping("/{id}")
+    @SuppressWarnings("Duplicates")
     public ResponseEntity<?> deletePost(@CurrentUser User user, @PathVariable("id") long id) {
         Post post = postRepository.findById(id).orElse(null);
         if (post == null) return ResponseEntity.notFound().build();
