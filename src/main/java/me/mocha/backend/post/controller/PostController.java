@@ -51,7 +51,8 @@ public class PostController {
     public ResponseEntity<Post> getPost(@PathVariable("id") long id) {
         Post post = postRepository.findById(id).orElse(null);
         if (post == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(post);
+        post.addViews(1);
+        return ResponseEntity.ok(postRepository.save(post));
     }
 
     @PatchMapping("/{id}")

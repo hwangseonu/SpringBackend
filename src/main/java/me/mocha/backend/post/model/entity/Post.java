@@ -37,4 +37,8 @@ public class Post {
 
     private long views;
 
+    public void addViews(int i) {
+        this.views += i;
+    }
+
 }
