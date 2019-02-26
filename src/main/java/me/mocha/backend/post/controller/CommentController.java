@@ -7,6 +7,7 @@ import me.mocha.backend.post.model.entity.Post;
 import me.mocha.backend.post.model.repository.PostRepository;
 import me.mocha.backend.post.request.AddCommentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,7 @@ public class CommentController {
         if (post == null) return ResponseEntity.notFound().build();
         for (Comment c : post.getComments()) {
             if (c.getId() == id) {
+                if (!c.getWriter().equals(user)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
                 c.setContent(request.getContent());
                 c.setUpdateAt(new Date());
                 postRepository.save(post);
@@ -59,6 +61,7 @@ public class CommentController {
         if (post == null) return ResponseEntity.notFound().build();
         for (Comment c : post.getComments()) {
             if (c.getId() == id) {
+                if (!c.getWriter().equals(user)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
                 post.getComments().remove(c);
                 postRepository.save(post);
                 return ResponseEntity.ok().build();
