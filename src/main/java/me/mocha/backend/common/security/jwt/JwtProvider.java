@@ -3,6 +3,7 @@ package me.mocha.backend.common.security.jwt;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ public class JwtProvider {
     @Value("${jwt.refresh.exp}")
     private long refreshExp;
 
+    @Getter
     private String secret = System.getenv("JWT_SECRET");
 
     public JwtProvider() {
@@ -54,5 +56,4 @@ public class JwtProvider {
             return false;
         }
     }
-
 }
