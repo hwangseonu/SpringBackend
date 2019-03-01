@@ -68,8 +68,8 @@ public class AuthControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.access").value("access"))
                 .andExpect(jsonPath("$.refresh").value("refresh"))
+                .andExpect(jsonPath("$.access").value("access"))
                 .andDo(print());
     }
 
