@@ -18,10 +18,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,7 +69,8 @@ public class AuthControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.access").value("access"))
-                .andExpect(jsonPath("$.refresh").value("refresh"));
+                .andExpect(jsonPath("$.refresh").value("refresh"))
+                .andDo(print());
     }
 
     @Test
@@ -76,7 +80,8 @@ public class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(print());
     }
 
     @Test
@@ -93,7 +98,63 @@ public class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+    @Test
+    public void refresh_badRequest() throws Exception {
+        mockMvc.perform(get("/auth/refresh")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    public void refresh_unprocessableEntity() throws Exception {
+        String jwt = "access";
+        given(jwtProvider.isValid(jwt, JwtType.REFRESH)).willReturn(false);
+        mockMvc.perform(get("/auth/refresh")
+                .header("Authorization", "Bearer " + jwt)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+    }
+
+    @Test
+    public void refresh_notfound() throws Exception {
+        String jwt = "refresh";
+        String username = "test1234";
+        given(jwtProvider.isValid(jwt, JwtType.REFRESH)).willReturn(true);
+        given(jwtProvider.getUsername(jwt)).willReturn(username);
+        given(userRepository.existsById(username)).willReturn(false);
+
+        mockMvc.perform(get("/auth/refresh")
+                .header("Authorization", "Bearer " + jwt)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    public void refresh_success() throws Exception {
+        String jwt = "refresh";
+        String username = "test1234";
+
+        given(jwtProvider.isValid(jwt, JwtType.REFRESH)).willReturn(true);
+        given(jwtProvider.getUsername(jwt)).willReturn(username);
+        given(jwtProvider.createToken(username, JwtType.ACCESS)).willReturn("access");
+        given(jwtProvider.createToken(username, JwtType.REFRESH)).willReturn("refresh");
+        given(jwtProvider.getExpiration(jwt)).willReturn(LocalDateTime.now().plusDays(6));
+        given(userRepository.existsById(username)).willReturn(true);
+
+        mockMvc.perform(get("/auth/refresh")
+                .header("Authorization", "Bearer " + jwt)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.access").value("access"))
+                .andExpect(jsonPath("$.refresh").value("refresh"))
+                .andDo(print());
     }
 
 }
